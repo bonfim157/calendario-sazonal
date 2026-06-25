@@ -45,7 +45,36 @@ Para testar as diferentes visões do projeto durante a apresentação, utilize a
 ---
 
 ## 🛠️ Tecnologias
-O projeto utiliza o que há de mais moderno e leve na web (**HTML5, CSS3 e JavaScript**), garantindo que o sistema seja rápido, bonito e funcione em qualquer dispositivo sem precisar de instalações complicadas.
+O projeto utiliza o que há de mais moderno e leve na web (**HTML5, CSS3, JavaScript e Next.js**) garantindo que o sistema seja rápido, bonito e funcione em qualquer dispositivo.
+
+---
+
+## 🚀 Executando localmente
+
+1. Instale dependências:
+
+```bash
+npm install
+```
+
+2. Inicie o servidor de desenvolvimento:
+
+```bash
+npm run dev
+```
+
+3. Seeds de demonstração: acesse `POST /api/seed` para popular usuários e eventos demo.
+
+4. Acesse: http://localhost:3000
+
+
+---
+
+## 📦 Deploy
+
+A forma mais simples de deploy é via Vercel (https://vercel.com). Crie um projeto apontando para este repositório e o Vercel fará o build automaticamente.
+
+> Atenção: o projeto atualmente usa um banco JSON local (lowdb) para demos. Em produção substitua por MongoDB Atlas ou outro DB gerenciado.
 
 ---
 
