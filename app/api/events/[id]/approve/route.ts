@@ -1,20 +1,34 @@
-import { NextResponse } from 'next/server';
-import { getDB } from '@/lib/db';
+import { NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
 
-export async function PUT(req: Request, context: any) {
-  const params = (context?.params && typeof context.params.then === 'function') ? await context.params : context.params;
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const id = params.id;
-    const body = await req.json();
-    const db = await getDB();
-    const ev = db.data!.events.find(e=>e.id === id);
-    if(!ev) return NextResponse.json({ error: 'Evento não encontrado' }, { status: 404 });
-    ev.status = body.status || 'approved';
-    ev.aprovadoPor = body.aprovadoPor || 'gestao.escola';
-    ev.motivo = body.motivo || '';
-    await db.write();
-    return NextResponse.json({ ok: true, event: ev });
-  } catch (err) {
-    return NextResponse.json({ error: 'Erro ao aprovar evento' }, { status: 500 });
+    const { id } = await params
+    const body = await req.json()
+    const { status, aprovadoPor, motivo } = body ?? {}
+
+    if (!status || !['approved', 'rejected'].includes(status)) {
+      return NextResponse.json({ erro: 'status deve ser approved ou rejected' }, { status: 400 })
+    }
+
+    const { data, error } = await supabase
+      .from('events')
+      .update({
+        status,
+        approved_by: aprovadoPor ?? null,
+        approved_at: new Date().toISOString(),
+        motivo: motivo ?? null,
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) return NextResponse.json({ erro: 'Evento não encontrado' }, { status: 404 })
+    return NextResponse.json({ ok: true, event: data })
+  } catch {
+    return NextResponse.json({ erro: 'Erro ao aprovar evento' }, { status: 500 })
   }
 }

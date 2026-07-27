@@ -1,21 +1,34 @@
-import { NextResponse } from 'next/server';
-import { getDB } from '@/lib/db';
-import { v4 as uuidv4 } from 'uuid';
+import { NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
 
 export async function GET() {
-  const db = await getDB();
-  return NextResponse.json({ events: db.data?.events || [] });
+  const { data, error } = await supabase
+    .from('events')
+    .select('*')
+    .order('date', { ascending: true })
+
+  if (error) return NextResponse.json({ erro: 'Erro ao buscar eventos' }, { status: 500 })
+  return NextResponse.json({ events: data ?? [] })
 }
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const db = await getDB();
-    const ev = { id: uuidv4(), ...body, status: body.status || 'pending' };
-    db.data!.events.push(ev);
-    await db.write();
-    return NextResponse.json({ ok: true, event: ev });
-  } catch (err) {
-    return NextResponse.json({ error: 'Erro ao criar evento' }, { status: 500 });
+    const body = await req.json()
+    const { date, title, category, nota, autor_login } = body ?? {}
+
+    if (!date || !title || !category) {
+      return NextResponse.json({ erro: 'date, title e category são obrigatórios' }, { status: 400 })
+    }
+
+    const { data, error } = await supabase
+      .from('events')
+      .insert({ date, title, category, nota: nota ?? null, autor_login: autor_login ?? null, status: 'pending' })
+      .select()
+      .single()
+
+    if (error) return NextResponse.json({ erro: 'Erro ao criar evento' }, { status: 500 })
+    return NextResponse.json({ ok: true, event: data })
+  } catch {
+    return NextResponse.json({ erro: 'Erro ao criar evento' }, { status: 500 })
   }
 }

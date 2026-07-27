@@ -6,8 +6,7 @@ import Chat from './Chat';
 const MONTHS_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const DAYS_PT = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
 
-function uid(){return Math.random().toString(36).slice(2,9)}
-function fmt(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+function fmt(y: number, m: number, d: number){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
 function today(){const t=new Date();return fmt(t.getFullYear(),t.getMonth(),t.getDate())}
 
 export default function LegacyApp(){
@@ -64,7 +63,6 @@ export default function LegacyApp(){
           <div className="nav-item">Projetos vinculados</div>
         </nav>
         <div className="sb-foot" style={{padding:18}}>
-          <button className="btn-out" onClick={async ()=>{await fetch('/api/seed',{method:'POST'}); loadEvents(); loadMessages();}}>Seed DB</button>
           <button className="btn-out" onClick={async ()=>{await fetch('/api/auth/logout',{method:'POST'}); window.location.href='/login';}}>Sair</button>
         </div>
       </aside>
@@ -141,7 +139,7 @@ export default function LegacyApp(){
           <div style={{height:220,overflow:'auto',padding:6}}>
             {messages.map(m=> (
               <div key={m.id} style={{marginBottom:10}}>
-                <div style={{fontSize:12,color:'#374151'}}><strong>{m.from}</strong> <span style={{opacity:.6,fontSize:11}}>{new Date(m.createdAt).toLocaleString()}</span></div>
+                <div style={{fontSize:12,color:'#374151'}}><strong>{m.from_login}</strong> <span style={{opacity:.6,fontSize:11}}>{new Date(m.created_at).toLocaleString()}</span></div>
                 <div style={{background:'#f3f4f6',padding:8,borderRadius:8}}>{m.text}</div>
               </div>
             ))}

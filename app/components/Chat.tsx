@@ -24,7 +24,7 @@ export default function Chat({ user }: { user:any }){
   async function send(e:any){
     e.preventDefault();
     if(!text) return;
-    await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ text, from: user.login }) });
+    await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ text, from_login: user?.login }) });
     setText('');
     load();
   }
@@ -34,7 +34,7 @@ export default function Chat({ user }: { user:any }){
       <div style={{flex:1,overflow:'auto',padding:8}}>
         {messages.map(m=> (
           <div key={m.id} style={{marginBottom:8}}>
-            <div style={{fontSize:12,color:'#374151'}}><strong>{m.from}</strong> <span style={{opacity:.6,fontSize:11}}>{new Date(m.createdAt).toLocaleString()}</span></div>
+            <div style={{fontSize:12,color:'#374151'}}><strong>{m.from_login}</strong> <span style={{opacity:.6,fontSize:11}}>{new Date(m.created_at).toLocaleString()}</span></div>
             <div style={{background:'#f3f4f6',padding:8,borderRadius:6}}>{m.text}</div>
           </div>
         ))}
