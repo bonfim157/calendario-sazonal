@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { ApproveSchema } from '@/lib/validation'
 
 export async function PUT(
   req: Request,
@@ -7,13 +8,16 @@ export async function PUT(
 ) {
   try {
     const { id } = await params
-    const body = await req.json()
-    const { status, aprovadoPor, motivo } = body ?? {}
-
-    if (!status || !['approved', 'rejected'].includes(status)) {
-      return NextResponse.json({ erro: 'status deve ser approved ou rejected' }, { status: 400 })
+    const body = await req.json().catch(() => null)
+    const parsed = ApproveSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { erro: 'Dados inválidos', detalhes: parsed.error.flatten() },
+        { status: 400 }
+      )
     }
 
+    const { status, aprovadoPor, motivo } = parsed.data
     const { data, error } = await supabase
       .from('events')
       .update({

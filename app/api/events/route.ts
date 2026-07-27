@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { EventSchema } from '@/lib/validation'
 
 export async function GET() {
   const { data, error } = await supabase
@@ -13,13 +14,16 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json()
-    const { date, title, category, nota, autor_login } = body ?? {}
-
-    if (!date || !title || !category) {
-      return NextResponse.json({ erro: 'date, title e category são obrigatórios' }, { status: 400 })
+    const body = await req.json().catch(() => null)
+    const parsed = EventSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { erro: 'Dados inválidos', detalhes: parsed.error.flatten() },
+        { status: 400 }
+      )
     }
 
+    const { date, title, category, nota, autor_login } = parsed.data
     const { data, error } = await supabase
       .from('events')
       .insert({ date, title, category, nota: nota ?? null, autor_login: autor_login ?? null, status: 'pending' })

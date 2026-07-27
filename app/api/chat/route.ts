@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { MessageSchema } from '@/lib/validation'
 
 export async function GET() {
   const { data, error } = await supabase
@@ -13,13 +14,16 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json()
-    const { text, from_login, to_login } = body ?? {}
-
-    if (!text || !from_login) {
-      return NextResponse.json({ erro: 'text e from_login são obrigatórios' }, { status: 400 })
+    const body = await req.json().catch(() => null)
+    const parsed = MessageSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { erro: 'Dados inválidos', detalhes: parsed.error.flatten() },
+        { status: 400 }
+      )
     }
 
+    const { text, from_login, to_login } = parsed.data
     const { data, error } = await supabase
       .from('messages')
       .insert({ text, from_login, to_login: to_login ?? null })
