@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { supabase } from '@/lib/supabase'
+import { isConfigured, supabase } from '@/lib/supabase'
 import { LoginSchema } from '@/lib/validation'
+import getDB from '@/lib/db'
 
 const SECRET = process.env.JWT_SECRET || 'dev_secret_change_me'
 
@@ -18,36 +19,44 @@ export async function POST(req: Request) {
     }
 
     const { login, senha } = parsed.data
-    const { data: user, error } = await supabase
-      .from('users')
-      .select('login, nome, papel, senha_hash')
-      .eq('login', login)
-      .single()
+    let userRecord: { login: string; nome: string; papel: string; hash: string } | null = null
 
-    if (error || !user) {
+    if (isConfigured) {
+      const { data: user, error } = await supabase
+        .from('users')
+        .select('login, nome, papel, senha_hash')
+        .eq('login', login)
+        .single()
+      if (!error && user && user.senha_hash) {
+        userRecord = { login: user.login, nome: user.nome, papel: user.papel, hash: user.senha_hash }
+      }
+    } else {
+      const db = await getDB()
+      const u = (db.data!.users as any[]).find(u => u.login === login)
+      const hash = u?.senha_hash ?? u?.senha
+      if (u && hash) {
+        userRecord = { login: u.login, nome: u.nome, papel: u.papel, hash }
+      }
+    }
+
+    if (!userRecord) {
       return NextResponse.json({ erro: 'Usuário não encontrado' }, { status: 401 })
     }
-    if (!user.senha_hash) {
-      return NextResponse.json(
-        { erro: 'Conta não configurada — contate a administração' },
-        { status: 401 }
-      )
-    }
 
-    const ok = await bcrypt.compare(senha, user.senha_hash)
+    const ok = await bcrypt.compare(senha, userRecord.hash)
     if (!ok) {
       return NextResponse.json({ erro: 'Senha inválida' }, { status: 401 })
     }
 
     const token = jwt.sign(
-      { login: user.login, papel: user.papel, nome: user.nome },
+      { login: userRecord.login, papel: userRecord.papel, nome: userRecord.nome },
       SECRET,
       { expiresIn: '8h' }
     )
 
     const res = NextResponse.json({
       ok: true,
-      user: { login: user.login, nome: user.nome, papel: user.papel },
+      user: { login: userRecord.login, nome: userRecord.nome, papel: userRecord.papel },
     })
     res.headers.set(
       'Set-Cookie',

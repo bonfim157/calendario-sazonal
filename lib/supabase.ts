@@ -1,9 +1,11 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
+export const isConfigured = !!(
+  process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
+)
+
 let _client: SupabaseClient | null = null
 
-// Lazy singleton — evita inicialização em nível de módulo sem env vars configuradas.
-// Nunca importar em arquivos 'use client' — usa SUPABASE_SERVICE_ROLE_KEY.
 export function getSupabase(): SupabaseClient {
   if (!_client) {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL

@@ -40,20 +40,12 @@ export default function Sidebar({ user, activeView }: Props) {
   return (
     <aside
       className="flex flex-col w-64 shrink-0 h-full text-white"
-      style={{ background: '#111827' }}
+      style={{ background: 'var(--accent)' }}
     >
-      {/* Tira de acento no topo — identifica o papel sem dominar */}
-      <div className="h-0.5 w-full shrink-0" style={{ background: 'var(--accent)' }} />
-
       {/* Brand */}
-      <div className="px-5 pt-5 pb-4 border-b border-white/8">
+      <div className="px-5 pt-5 pb-4 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-sm font-black shrink-0"
-            style={{ background: 'var(--accent)' }}
-          >
-            E
-          </div>
+          <span className="text-2xl">📚</span>
           <div>
             <div className="font-extrabold text-sm leading-tight">EduCalendário</div>
             <div className="text-white/35 text-[11px]">Portal Escolar</div>
@@ -62,24 +54,24 @@ export default function Sidebar({ user, activeView }: Props) {
       </div>
 
       {/* User pill */}
-      <div className="px-5 py-4 border-b border-white/8">
+      <div className="px-5 py-4 border-b border-white/10">
         <div className="flex items-center gap-3">
           <div
-            className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shrink-0"
-            style={{ background: 'var(--accent)', opacity: 0.85 }}
+            className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
+            style={{ background: 'rgba(255,255,255,0.2)' }}
           >
             {initials}
           </div>
           <div className="min-w-0">
-            <div className="font-semibold text-sm truncate text-white/90">{user?.nome ?? '—'}</div>
-            <div className="text-white/40 text-xs">{user ? PAPEL_LABEL[user.papel] : '—'}</div>
+            <div className="font-semibold text-sm truncate">{user?.nome ?? '—'}</div>
+            <div className="text-white/60 text-xs">{user ? PAPEL_LABEL[user.papel] : '—'}</div>
           </div>
           <div className="ml-auto w-2 h-2 rounded-full bg-emerald-400 shrink-0" title="Online" />
         </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         {navItems.map(item => {
           const isActive = activeView
             ? item.href.includes(activeView)
@@ -88,15 +80,15 @@ export default function Sidebar({ user, activeView }: Props) {
             <button
               key={item.label}
               onClick={() => router.push(item.href)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                          transition-all text-left"
               style={{
-                background: isActive ? 'rgba(255,255,255,0.07)' : 'transparent',
-                color: isActive ? 'white' : 'rgba(255,255,255,0.5)',
-                boxShadow: isActive ? 'inset 3px 0 0 var(--accent)' : 'none',
+                background: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
+                color: isActive ? 'white' : 'rgba(255,255,255,0.65)',
+                boxShadow: isActive ? 'inset 3px 0 0 rgba(255,255,255,0.7)' : 'none',
               }}
             >
-              <span className="text-base">{item.icon}</span>
+              <span>{item.icon}</span>
               <span>{item.label}</span>
             </button>
           )
@@ -104,13 +96,13 @@ export default function Sidebar({ user, activeView }: Props) {
       </nav>
 
       {/* Footer */}
-      <div className="px-3 pb-5 pt-3 border-t border-white/8">
+      <div className="px-3 pb-5 pt-3 border-t border-white/10">
         <button
           onClick={logout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
-                     text-white/40 hover:text-white/80 hover:bg-white/05 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                     text-white/65 hover:text-white hover:bg-white/10 transition-all"
         >
-          <span className="text-base">🚪</span>
+          <span>🚪</span>
           <span>Sair</span>
         </button>
       </div>
