@@ -75,7 +75,7 @@ export default function ChatPanel({ user }: Props) {
                     ? 'text-white rounded-tr-sm'
                     : 'text-slate-800 bg-slate-100 rounded-tl-sm'
                 }`}
-                style={{ background: isMe ? '#1a73e8' : undefined }}
+                style={{ background: isMe ? 'var(--accent)' : undefined }}
               >
                 {m.text}
               </div>
@@ -101,7 +101,7 @@ export default function ChatPanel({ user }: Props) {
           disabled={sending || !text.trim()}
           className="px-3 py-2 rounded-lg text-xs font-bold text-white transition-all
                      disabled:opacity-50"
-          style={{ background: '#1a73e8' }}
+          style={{ background: 'var(--accent)' }}
         >
           {sending ? '...' : '↑'}
         </button>

@@ -154,7 +154,7 @@ export default function EventModal({ date, user, onClose, onCreated }: Props) {
               disabled={loading}
               className="flex-1 py-2.5 rounded-lg text-sm font-bold text-white transition-all
                          disabled:opacity-60"
-              style={{ background: '#1a73e8' }}
+              style={{ background: 'var(--accent)' }}
             >
               {loading ? 'Salvando...' : 'Criar Evento'}
             </button>

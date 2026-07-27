@@ -4,12 +4,6 @@ import { useRouter } from 'next/navigation'
 
 type User = { login: string; nome: string; papel: 'professor' | 'aluno' | 'gestao' }
 
-const SIDEBAR_COLORS: Record<string, string> = {
-  professor: '#1e3a8a',
-  aluno:     '#14532d',
-  gestao:    '#4c1d95',
-}
-
 const PAPEL_LABEL: Record<string, string> = {
   professor: 'Professor',
   aluno:     'Aluno',
@@ -32,7 +26,6 @@ interface Props {
 
 export default function Sidebar({ user, activeView }: Props) {
   const router = useRouter()
-  const bg = user ? (SIDEBAR_COLORS[user.papel] ?? '#1e3a8a') : '#1e3a8a'
   const initials = user ? user.nome.split(' ').map(n => n[0]).slice(0, 2).join('') : '—'
 
   async function logout() {
@@ -47,7 +40,7 @@ export default function Sidebar({ user, activeView }: Props) {
   return (
     <aside
       className="flex flex-col w-64 shrink-0 h-full text-white"
-      style={{ background: bg }}
+      style={{ background: 'var(--accent)' }}
     >
       {/* Brand */}
       <div className="px-5 pt-6 pb-4 border-b border-white/10">

@@ -92,7 +92,7 @@ export default function Calendar({ events, user, onEventCreated }: Props) {
               onClick={() => setModalDate(today)}
               className="px-4 py-2 rounded-lg text-sm font-bold text-white transition-all
                          hover:opacity-90 active:scale-95"
-              style={{ background: '#1a73e8' }}
+              style={{ background: 'var(--accent)' }}
             >
               + Novo Evento
             </button>
@@ -121,14 +121,15 @@ export default function Calendar({ events, user, onEventCreated }: Props) {
               onClick={() => canCreate && setModalDate(cell.date)}
               className={`min-h-24 rounded-xl p-2 transition-all border
                 ${isToday
-                  ? 'bg-blue-50 border-blue-200 shadow-[0_0_0_2px_#1a73e8]'
+                  ? 'bg-white border-slate-200 shadow-[0_0_0_2px_var(--accent)]'
                   : 'bg-white border-slate-100 hover:border-slate-200 hover:shadow-sm'}
                 ${canCreate ? 'cursor-pointer' : ''}
               `}
             >
-              <span className={`text-xs font-bold block mb-1.5 ${
-                isToday ? 'text-blue-600' : 'text-slate-500'
-              }`}>
+              <span
+                className="text-xs font-bold block mb-1.5"
+                style={{ color: isToday ? 'var(--accent)' : '#64748b' }}
+              >
                 {cell.day}
               </span>
               <div className="space-y-1">

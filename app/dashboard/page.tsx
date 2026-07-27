@@ -52,7 +52,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <Shell>
+    <Shell role={user?.papel}>
       <Sidebar user={user} />
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Topbar user={user} />
