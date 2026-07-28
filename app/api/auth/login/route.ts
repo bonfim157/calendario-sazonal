@@ -4,8 +4,21 @@ import jwt from 'jsonwebtoken'
 import { isConfigured, supabase } from '@/lib/supabase'
 import { LoginSchema } from '@/lib/validation'
 import getDB from '@/lib/db'
+import { checkRateLimit, getClientIP } from '@/lib/rate-limit'
 
-const SECRET = process.env.JWT_SECRET || 'dev_secret_change_me'
+const SECRET = process.env.JWT_SECRET
+if (!SECRET) {
+  console.error('❌ JWT_SECRET não configurado. Configure a variável de ambiente JWT_SECRET.')
+  // Em desenvolvimento, podemos usar um fallback, mas com warning claro
+  if (process.env.NODE_ENV === 'development') {
+    console.warn('⚠️  Usando fallback para desenvolvimento APENAS. NUNCA use em produção.')
+  } else {
+    throw new Error('JWT_SECRET não configurado para produção')
+  }
+}
+
+// Fallback apenas para desenvolvimento, nunca para produção
+const SECRET_TO_USE = SECRET || (process.env.NODE_ENV === 'development' ? 'dev_secret_change_me_temp_only' : '')
 
 export async function POST(req: Request) {
   try {
@@ -19,6 +32,32 @@ export async function POST(req: Request) {
     }
 
     const { login, senha } = parsed.data
+
+    // 🛡️ Rate Limiting para proteção contra brute force
+    const clientIP = getClientIP(req)
+    const rateLimitKey = `login:${clientIP}:${login}`
+    const rateLimit = checkRateLimit(rateLimitKey, 15 * 60 * 1000, 5) // 5 tentativas em 15 minutos
+    
+    if (rateLimit.exceeded) {
+      return NextResponse.json(
+        { 
+          erro: 'Muitas tentativas de login. Tente novamente em 15 minutos.',
+          detalhes: {
+            resetTime: new Date(rateLimit.resetTime).toISOString(),
+            tentativasRestantes: rateLimit.remaining,
+          }
+        },
+        { 
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': '5',
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': rateLimit.resetTime.toString(),
+            'Retry-After': Math.ceil((rateLimit.resetTime - Date.now()) / 1000).toString(),
+          }
+        }
+      )
+    }
     let userRecord: { login: string; nome: string; papel: string; hash: string } | null = null
 
     if (isConfigured) {
@@ -50,7 +89,7 @@ export async function POST(req: Request) {
 
     const token = jwt.sign(
       { login: userRecord.login, papel: userRecord.papel, nome: userRecord.nome },
-      SECRET,
+      SECRET_TO_USE,
       { expiresIn: '8h' }
     )
 
