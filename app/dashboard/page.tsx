@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Shell from '@/app/components/layout/Shell'
 import Sidebar from '@/app/components/layout/Sidebar'
 import Topbar from '@/app/components/layout/Topbar'
-import Calendar from '@/app/components/Calendar'
+import EnhancedCalendar from '@/app/components/EnhancedCalendar'
 import RightPanel from '@/app/components/RightPanel'
 
 type User  = { login: string; nome: string; papel: 'professor' | 'aluno' | 'gestao' }

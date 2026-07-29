@@ -5,72 +5,14 @@
    ============================================ */
 
 @theme {
-  /* 🎨 PALETA DE CORES INSTITUCIONAL (Azul #1E40AF) */
-  --color-primary-50:   #EFF6FF;
-  --color-primary-100:  #DBEAFE;
-  --color-primary-200:  #BFDBFE;
-  --color-primary-300:  #93C5FD;
-  --color-primary-400:  #60A5FA;
-  --color-primary-500:  #3B82F6;
-  --color-primary-600:  #2563EB;
-  --color-primary-700:  #1D4ED8;
-  --color-primary-800:  #1E40AF;  /* COR INSTITUCIONAL PRINCIPAL */
-  --color-primary-900:  #1E3A8A;
-  --color-primary-950:  #172554;
-  
-  /* 🎨 CORES NEUTRAS PROFISSIONAIS */
-  --color-neutral-50:   #F8FAFC;
-  --color-neutral-100:  #F1F5F9;
-  --color-neutral-200:  #E2E8F0;
-  --color-neutral-300:  #CBD5E1;
-  --color-neutral-400:  #94A3B8;
-  --color-neutral-500:  #64748B;
-  --color-neutral-600:  #475569;
-  --color-neutral-700:  #334155;
-  --color-neutral-800:  #1E293B;
-  --color-neutral-900:  #0F172A;
-  --color-neutral-950:  #020617;
-  
-  /* 🎨 CORES SEMÂNTICAS */
-  --color-success-50:   #F0FDF4;
-  --color-success-500:  #10B981;
-  --color-success-600:  #059669;
-  --color-success-700:  #047857;
-  
-  --color-warning-50:   #FFFBEB;
-  --color-warning-500:  #F59E0B;
-  --color-warning-600:  #D97706;
-  --color-warning-700:  #B45309;
-  
-  --color-error-50:     #FEF2F2;
-  --color-error-500:    #EF4444;
-  --color-error-600:    #DC2626;
-  --color-error-700:    #B91C1C;
-  
-  /* 🎨 CORES POR PERFIL (Compatibilidade) */
-  --color-profile-professor: #1E40AF;
-  --color-profile-aluno:     #059669;
-  --color-profile-gestao:    #7C3AED;
-  
-  /* 🎨 TOKENS DE DESIGN (Compatibilidade) */
-  --color-primary:       var(--color-primary-800);   /* #1E40AF */
-  --color-success:       var(--color-success-600);   /* #059669 */
-  --color-danger:        var(--color-error-600);     /* #DC2626 */
-  --color-warning:       var(--color-warning-600);   /* #D97706 */
-  
-  --color-bg:            var(--color-neutral-50);    /* #F8FAFC */
-  --color-surface:       var(--color-neutral-0);     /* #FFFFFF */
-  --color-border:        var(--color-neutral-200);   /* #E2E8F0 */
-  --color-text:          var(--color-neutral-800);   /* #1E293B */
-  --color-muted:         var(--color-neutral-500);   /* #64748B */
-  
-  --color-sb-professor:  var(--color-profile-professor);
-  --color-sb-aluno:      var(--color-profile-aluno);
-  --color-sb-gestao:     var(--color-profile-gestao);
+  /* 🎨 TOKENS DO SISTEMA DE DESIGN (gerados pelo ThemeProvider) */
+  /* As variáveis CSS serão injetadas dinamicamente pelo ThemeProvider */
   
   /* 🎪 SOMBRAS PROFISSIONAIS */
   --shadow-card:   0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-modal:  0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-lg:     0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl:     0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   
   /* 📐 BORDER RADIUS CONSISTENTE */
   --radius-sm:     4px;
@@ -79,44 +21,282 @@
   --radius-lg:     16px;
   --radius-xl:     24px;
   --radius-2xl:    32px;
+  --radius-3xl:    48px;
+  --radius-full:   9999px;
   
-  /* 🎬 ANIMAÇÕES (Mobile-first) */
-  --animation-duration-fast:  150ms;
-  --animation-duration-base:  300ms;
-  --animation-duration-slow:  500ms;
-  --animation-timing:         cubic-bezier(0.4, 0, 0.2, 1);
+  /* 🎬 ANIMAÇÕES PROFISSIONAIS */
+  --animation-duration-fastest: 75ms;
+  --animation-duration-faster:  100ms;
+  --animation-duration-fast:    150ms;
+  --animation-duration-base:    200ms;
+  --animation-duration-slow:    300ms;
+  --animation-duration-slower:  500ms;
+  --animation-duration-slowest: 700ms;
+  
+  --animation-timing-linear: linear;
+  --animation-timing-ease: ease;
+  --animation-timing-ease-in: ease-in;
+  --animation-timing-ease-out: ease-out;
+  --animation-timing-ease-in-out: ease-in-out;
+  --animation-timing-material: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* 📱 BREAKPOINTS MOBILE-FIRST */
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
 }
 
 /* ============================================
-   🎯 CONFIGURAÇÕES POR PERFIL (Compatibilidade)
+   🎯 VARIÁVEIS DE COMPATIBILIDADE (para código existente)
    ============================================ */
 
 /* ── Accent padrão (fallback antes do login) ── */
 :root {
-  --accent:       var(--color-primary-800);          /* #1E40AF */
-  --accent-light: var(--color-primary-100);          /* #DBEAFE */
-  --accent-muted: rgba(30, 64, 175, 0.12);           /* #1E40AF com 12% opacity */
+  --accent:       var(--edu-primary, #1E40AF);
+  --accent-light: var(--edu-primary-100, #DBEAFE);
+  --accent-muted: rgba(30, 64, 175, 0.12);
+  
+  --color-bg:            var(--edu-background, #F8FAFC);
+  --color-surface:       var(--edu-card, #FFFFFF);
+  --color-border:        var(--edu-border, #E2E8F0);
+  --color-text:          var(--edu-foreground, #1E293B);
+  --color-muted:         var(--edu-muted-foreground, #64748B);
+  
+  --color-primary:       var(--edu-primary, #1E40AF);
+  --color-success:       var(--edu-success, #059669);
+  --color-danger:        var(--edu-destructive, #DC2626);
+  --color-warning:       var(--edu-warning, #D97706);
 }
 
 /* ── Professor (Azul Institucional) ── */
 [data-role="professor"] {
-  --accent:       var(--color-profile-professor);    /* #1E40AF */
-  --accent-light: var(--color-primary-100);          /* #DBEAFE */
-  --accent-muted: rgba(30, 64, 175, 0.10);           /* #1E40AF com 10% opacity */
+  --accent:       var(--color-profile-professor, #1E40AF);
+  --accent-light: var(--edu-primary-100, #DBEAFE);
+  --accent-muted: rgba(30, 64, 175, 0.10);
 }
 
 /* ── Gestão (Roxo Autoridade) ── */
 [data-role="gestao"] {
-  --accent:       var(--color-profile-gestao);       /* #7C3AED */
-  --accent-light: #EDE9FE;                           /* Roxo claro personalizado */
-  --accent-muted: rgba(124, 58, 237, 0.10);          /* #7C3AED com 10% opacity */
+  --accent:       var(--color-profile-gestao, #7C3AED);
+  --accent-light: #EDE9FE;
+  --accent-muted: rgba(124, 58, 237, 0.10);
 }
 
 /* ── Aluno (Verde Profissional) ── */
 [data-role="aluno"] {
-  --accent:       var(--color-profile-aluno);        /* #059669 */
-  --accent-light: #DCFCE7;                           /* Verde claro personalizado */
-  --accent-muted: rgba(5, 150, 105, 0.10);           /* #059669 com 10% opacity */
+  --accent:       var(--color-profile-aluno, #059669);
+  --accent-light: #DCFCE7;
+  --accent-muted: rgba(5, 150, 105, 0.10);
+}
+
+/* ============================================
+   🌙 SUPORTE A TEMA ESCURO
+   ============================================ */
+
+.dark {
+  /* Sobrescrever variáveis de compatibilidade para tema escuro */
+  --color-bg:            var(--edu-background, #020617);
+  --color-surface:       var(--edu-card, #0F172A);
+  --color-border:        var(--edu-border, #1E293B);
+  --color-text:          var(--edu-foreground, #F8FAFC);
+  --color-muted:         var(--edu-muted-foreground, #94A3B8);
+}
+
+/* ============================================
+   🛠️ ESTILOS GLOBAIS E RESETS
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01';
+  transition: background-color 200ms var(--animation-timing-material),
+              color 200ms var(--animation-timing-material);
+}
+
+body {
+  font-family: var(--edu-font-family, 'Inter', 'Nunito Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   🎯 CLASSES UTILITÁRIAS
+   ============================================ */
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+/* ============================================
+   🎨 ELEMENTOS DE FORMULÁRIO
+   ============================================ */
+
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+input:focus, textarea:focus, select:focus, button:focus {
+  outline: 2px solid var(--edu-ring, #3B82F6);
+  outline-offset: 2px;
+}
+
+input:disabled, textarea:disabled, select:disabled, button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   🔗 LINKS E INTERATIVIDADE
+   ============================================ */
+
+a {
+  color: var(--edu-primary, #1E40AF);
+  text-decoration: none;
+  transition: color 150ms var(--animation-timing-material);
+}
+
+a:hover {
+  color: var(--edu-primary-600, #2563EB);
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font: inherit;
+  transition: all 150ms var(--animation-timing-material);
+}
+
+/* ============================================
+   📜 SCROLLBAR PERSONALIZADO
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--edu-muted, #F1F5F9);
+  border-radius: var(--radius-full, 9999px);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--edu-border, #E2E8F0);
+  border-radius: var(--radius-full, 9999px);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--edu-muted-foreground, #94A3B8);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--edu-muted, #1E293B);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--edu-border, #334155);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--edu-muted-foreground, #64748B);
+}
+
+/* ============================================
+   🎪 ESTADOS DE REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   🎯 SELEÇÃO DE TEXTO
+   ============================================ */
+
+::selection {
+  background-color: var(--edu-primary, #1E40AF);
+  color: white;
+}
+
+/* ============================================
+   📱 UTILITÁRIOS PARA MOBILE
+   ============================================ */
+
+/* Prevenir zoom em inputs no iOS */
+@media screen and (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px; /* Evita zoom automático no iOS */
+  }
+}
+
+/* Touch targets mínimos para acessibilidade */
+@media (pointer: coarse) {
+  button, 
+  a, 
+  input[type="checkbox"], 
+  input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 * {
