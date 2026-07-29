@@ -259,7 +259,7 @@ export async function verificarPermissao(
     }
 
     // Mapear níveis de acesso para hierarquia
-    const nivelHierarquia = {
+    const nivelHierarquia: Record<string, number> = {
       leitura: 1,
       escrita: 2,
       moderacao: 3,
@@ -316,7 +316,7 @@ export async function getModulosInstalados(
       return []
     }
 
-    return data.map(item => item.modulo)
+    return data.map(item => item.modulo) as unknown as Modulo[]
   } catch (error) {
     console.error('Erro inesperado ao obter módulos:', error)
     return []
@@ -698,25 +698,6 @@ async function verificarToken(token: string): Promise<{ usuarioId: string; escol
 }
 
 // ============================================
-// 📋 EXPORTAÇÕES
 // ============================================
-
-export {
-  getEscolaAtual,
-  getUsuarioAtualComEscola,
-  verificarPermissao,
-  getModulosInstalados,
-  getEventosCalendario,
-  criarEventoCalendario,
-  atualizarEventoCalendario,
-  withMultiTenant,
-}
-
-export type {
-  Escola,
-  Usuario,
-  EscolaUsuario,
-  Modulo,
-  Permissao,
-  EventoCalendario,
-}
+// 📋 EXPORTAÇÕES (funções e tipos já exportados nas declarações acima)
+// ============================================

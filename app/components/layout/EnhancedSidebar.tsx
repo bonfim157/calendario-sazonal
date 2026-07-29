@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDesignSystem } from '@/lib/theme-provider'
+import { colors as dsColors } from '@/lib/design-system'
 
 interface EnhancedSidebarProps {
   user: any
@@ -35,10 +36,10 @@ export default function EnhancedSidebar({ user }: EnhancedSidebarProps) {
 
   const getRoleColor = () => {
     switch (user?.papel) {
-      case 'professor': return colors.primary[800]
-      case 'aluno': return colors.semantic.success[600]
-      case 'gestao': return colors.profile.gestao
-      default: return colors.primary[500]
+      case 'professor': return dsColors.primary[800]
+      case 'aluno': return dsColors.semantic.success[600]
+      case 'gestao': return dsColors.profile.gestao
+      default: return dsColors.primary[500]
     }
   }
 

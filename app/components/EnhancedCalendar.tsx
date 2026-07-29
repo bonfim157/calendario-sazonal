@@ -28,6 +28,7 @@ const MONTHS = [
 ]
 
 const DAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+const DAYS_SHORT = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'] // Iniciais para mobile
 
 const CATEGORY_COLORS: Record<string, { light: string; dark: string }> = {
   red:    { light: '#FEE2E2', dark: '#991B1B' },      // Urgente
@@ -138,9 +139,10 @@ export default function EnhancedCalendar({ events, user, onEventCreated }: Enhan
   }
 
   // Renderizar lista de eventos para uma data
-  const renderEventList = (dateEvents: Event[], date: string) => {
+  const renderEventList = (dateEvents: Event[], date: string, isMobile = false) => {
     const isExpanded = expandedDate === date
-    const showCount = 3 // Mostrar até 3 eventos sem expandir
+    // Mobile: 1 evento sem expandir; Desktop: 3 eventos
+    const showCount = isMobile ? 1 : 3
     
     return (
       <div className="mt-1 space-y-1 max-h-32 overflow-y-auto">
@@ -173,7 +175,7 @@ export default function EnhancedCalendar({ events, user, onEventCreated }: Enhan
             }}
             className="text-xs text-muted-foreground hover:text-foreground px-1.5 py-0.5 rounded hover:bg-muted transition-colors w-full text-left"
           >
-            +{dateEvents.length - showCount} mais eventos
+            +{dateEvents.length - showCount} {isMobile ? '' : 'mais eventos'}
           </button>
         )}
         
@@ -259,14 +261,20 @@ export default function EnhancedCalendar({ events, user, onEventCreated }: Enhan
           {canCreate && (
             <button
               onClick={() => setModalDate(today)}
+              aria-label="Novo Evento"
               className={cn(
-                "px-4 py-2 rounded-lg text-sm font-bold",
+                "rounded-lg font-bold",
                 "bg-primary text-primary-foreground",
                 "hover:opacity-90 active:scale-95 transition-all",
-                "shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                "shadow-sm focus:outline-none focus:ring-2 focus:ring-ring",
+                // Mobile: quadrado com ícone; sm+: texto completo
+                "w-[44px] h-[44px] flex items-center justify-center text-xl sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:text-sm"
               )}
             >
-              + Novo Evento
+              {/* Mobile: só ícone */}
+              <span className="sm:hidden" aria-hidden="true">+</span>
+              {/* Desktop: texto completo */}
+              <span className="hidden sm:inline">+ Novo Evento</span>
             </button>
           )}
         </div>
@@ -274,12 +282,14 @@ export default function EnhancedCalendar({ events, user, onEventCreated }: Enhan
 
       {/* Cabeçalho dos dias da semana */}
       <div className="grid grid-cols-7 gap-1 md:gap-2 mb-2">
-        {DAYS.map(day => (
+        {DAYS.map((day, i) => (
           <div 
             key={day} 
             className="text-center text-xs font-bold text-muted-foreground uppercase tracking-wider py-1.5"
           >
-            {day}
+            {/* Mobile: iniciais; sm+: nome abreviado */}
+            <span className="sm:hidden">{DAYS_SHORT[i]}</span>
+            <span className="hidden sm:inline">{day}</span>
           </div>
         ))}
       </div>
@@ -288,7 +298,7 @@ export default function EnhancedCalendar({ events, user, onEventCreated }: Enhan
       <div className="grid grid-cols-7 gap-1 md:gap-2">
         {calendarCells.map((cell, index) => {
           if (!cell) {
-            return <div key={`empty-${index}`} className="min-h-24" />
+            return <div key={`empty-${index}`} className="min-h-16 sm:min-h-24" />
           }
           
           const dateEvents = getVisibleEvents(cell.date)
@@ -300,7 +310,7 @@ export default function EnhancedCalendar({ events, user, onEventCreated }: Enhan
               key={cell.date}
               onClick={() => canCreate && setModalDate(cell.date)}
               className={cn(
-                "min-h-24 rounded-lg p-1.5 md:p-2 transition-all border",
+                "min-h-16 sm:min-h-24 rounded-lg p-1.5 md:p-2 transition-all border",
                 "relative group",
                 isToday
                   ? "bg-primary/5 border-primary/20 shadow-[0_0_0_2px_var(--accent)]"
@@ -322,8 +332,13 @@ export default function EnhancedCalendar({ events, user, onEventCreated }: Enhan
                 {renderEventBadge(dateEvents.length)}
               </div>
 
-              {/* Lista de eventos */}
-              {dateEvents.length > 0 && renderEventList(dateEvents, cell.date)}
+              {/* Lista de eventos — mobile: compacto (1 evento), sm+: padrão */}
+              {dateEvents.length > 0 && (
+                <>
+                  <div className="sm:hidden">{renderEventList(dateEvents, cell.date, true)}</div>
+                  <div className="hidden sm:block">{renderEventList(dateEvents, cell.date, false)}</div>
+                </>
+              )}
 
               {/* Botão para adicionar mais eventos (sempre visível se puder criar) */}
               {canCreate && (

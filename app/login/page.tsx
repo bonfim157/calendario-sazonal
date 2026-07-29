@@ -116,13 +116,14 @@ export default function LoginPage() {
         className="flex flex-col items-center w-full"
         style={{
           opacity: visible ? 1 : 0,
-          transition: 'opacity 0.18s ease',
+          transform: visible ? 'translateY(0)' : 'translateY(8px)',
+          transition: 'opacity 0.18s ease, transform 0.18s ease',
         }}
       >
         {!papel ? (
           /* ── Seletor de papel ── */
           <>
-            <div className="mb-12 text-center">
+            <div className="mb-12 text-center animate-fadeSlideDown">
               <p className="text-white/30 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
                 Portal Escolar
               </p>
@@ -131,15 +132,18 @@ export default function LoginPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl">
-              {ROLE_CARDS.map(({ papel: p, icon, desc, border }) => (
+              {ROLE_CARDS.map(({ papel: p, icon, desc, border }, idx) => (
                 <button
                   key={p}
                   onClick={() => selectRole(p)}
                   className="flex-1 flex flex-col items-center gap-4 px-6 py-8 rounded-2xl
-                             text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                             text-white transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]
+                             animate-fadeSlideUp"
                   style={{
                     background: 'rgba(255,255,255,0.04)',
                     border: '1px solid rgba(255,255,255,0.08)',
+                    // Stagger de entrada: 0ms, 80ms, 160ms
+                    animationDelay: `${idx * 80}ms`,
                   }}
                   onMouseEnter={e => {
                     const el = e.currentTarget as HTMLButtonElement
@@ -177,11 +181,11 @@ export default function LoginPage() {
           </>
         ) : (
           /* ── Formulário temático ── */
-          <div className="w-full max-w-sm">
+          <div className="w-full max-w-sm animate-fadeSlideUp">
             <button
               onClick={back}
               className="flex items-center gap-2 mb-8 text-sm transition-colors"
-              style={{ color: 'rgba(255,255,255,0.4)' }}
+              style={{ color: 'rgba(255,255,255,0.4)', minHeight: '44px' }}
               onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.9)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.4)' }}
             >
@@ -246,7 +250,7 @@ export default function LoginPage() {
                 </div>
 
                 {erro && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 text-xs px-4 py-3 rounded-lg">
+                  <div className="bg-red-50 border border-red-200 text-red-700 text-xs px-4 py-3 rounded-lg animate-shake">
                     {erro}
                   </div>
                 )}
@@ -255,10 +259,18 @@ export default function LoginPage() {
                   type="submit"
                   disabled={loading}
                   className="w-full py-3 rounded-lg font-bold text-white text-sm
-                             transition-all mt-2 disabled:opacity-60"
-                  style={{ background: loading ? '#94a3b8' : theme!.accent }}
+                             transition-all mt-2 disabled:opacity-60
+                             flex items-center justify-center gap-2"
+                  style={{ background: loading ? '#94a3b8' : theme!.accent, minHeight: '44px' }}
                 >
-                  {loading ? 'Verificando...' : 'Entrar'}
+                  {loading ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Verificando...
+                    </>
+                  ) : (
+                    'Entrar'
+                  )}
                 </button>
               </form>
 

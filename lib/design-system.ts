@@ -285,18 +285,18 @@ export const defaultTheme = {
   colors: {
     background: colors.neutral[50], // #F8FAFC
     foreground: colors.neutral[900], // #0F172A
-    card: colors.neutral[0], // #FFFFFF
+    card: '#FFFFFF', // #FFFFFF
     'card-foreground': colors.neutral[900],
     primary: colors.primary[800], // #1E40AF
-    'primary-foreground': colors.neutral[0],
+    'primary-foreground': '#FFFFFF',
     secondary: colors.primary[100],
     'secondary-foreground': colors.primary[900],
     muted: colors.neutral[100],
     'muted-foreground': colors.neutral[600],
     accent: colors.primary[500],
-    'accent-foreground': colors.neutral[0],
+    'accent-foreground': '#FFFFFF',
     destructive: colors.semantic.error[600],
-    'destructive-foreground': colors.neutral[0],
+    'destructive-foreground': '#FFFFFF',
     border: colors.neutral[200],
     input: colors.neutral[300],
     ring: colors.primary[500],
@@ -368,32 +368,45 @@ export function getCurrentTheme(isDarkMode = false) {
 }
 
 /**
+ * Tipo para qualquer tema (light ou dark)
+ */
+type AnyTheme = {
+  colors: Record<string, string>
+  borderRadius: Record<string, string>
+  spacing: Record<string, string>
+  [key: string]: unknown
+}
+
+/**
  * Converte valores do design system para CSS custom properties
  */
-export function toCSSVariables(theme: typeof defaultTheme, prefix = 'edu') {
+export function toCSSVariables(theme: AnyTheme, prefix = 'edu') {
   const variables: Record<string, string> = {}
-  
+
   // Cores
   Object.entries(theme.colors).forEach(([key, value]) => {
     variables[`--${prefix}-${key}`] = value
   })
-  
+
   // Border radius
   Object.entries(theme.borderRadius).forEach(([key, value]) => {
     variables[`--${prefix}-radius-${key}`] = value
   })
-  
+
   // Espaçamento
   Object.entries(theme.spacing).forEach(([key, value]) => {
     variables[`--${prefix}-spacing-${key}`] = value
   })
-  
+
   return variables
 }
 
 /**
  * Tipo para o tema completo
  */
-export type Theme = typeof defaultTheme
+/**
+ * Tipo para o tema completo — union de light e dark
+ */
+export type Theme = typeof defaultTheme | typeof darkTheme
 export type ColorPalette = typeof colors
 export type ProfileType = keyof typeof profileConfig

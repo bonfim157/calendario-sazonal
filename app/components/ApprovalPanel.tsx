@@ -21,8 +21,10 @@ interface Props {
 
 export default function ApprovalPanel({ events, user, onRefresh }: Props) {
   const pending = events.filter(e => e.status === 'pending')
-  const [loadingId, setLoadingId] = useState<string | null>(null)
-  const [motivos, setMotivos]     = useState<Record<string, string>>({})
+  const [loadingId, setLoadingId]     = useState<string | null>(null)
+  const [motivos, setMotivos]         = useState<Record<string, string>>({})
+  // Tracks which button just fired: `${id}-approved` | `${id}-rejected`
+  const [bouncingKey, setBouncingKey] = useState<string | null>(null)
 
   if (user?.papel !== 'gestao') return null
   if (pending.length === 0) {
@@ -38,6 +40,10 @@ export default function ApprovalPanel({ events, user, onRefresh }: Props) {
   }
 
   async function action(id: string, status: 'approved' | 'rejected') {
+    const key = `${id}-${status}`
+    setBouncingKey(key)
+    setTimeout(() => setBouncingKey(null), 250)
+
     setLoadingId(id)
     try {
       await fetch(`/api/events/${id}/approve`, {
@@ -91,16 +97,16 @@ export default function ApprovalPanel({ events, user, onRefresh }: Props) {
               <button
                 onClick={() => action(ev.id, 'approved')}
                 disabled={loadingId === ev.id}
-                className="flex-1 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-500
-                           hover:bg-emerald-600 disabled:opacity-50 transition-colors"
+                className={`flex-1 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-500
+                           hover:bg-emerald-600 disabled:opacity-50 transition-colors${bouncingKey === `${ev.id}-approved` ? ' animate-bounce-slight' : ''}`}
               >
                 ✓ Aprovar
               </button>
               <button
                 onClick={() => action(ev.id, 'rejected')}
                 disabled={loadingId === ev.id}
-                className="flex-1 py-1.5 rounded-lg text-xs font-bold text-white bg-red-500
-                           hover:bg-red-600 disabled:opacity-50 transition-colors"
+                className={`flex-1 py-1.5 rounded-lg text-xs font-bold text-white bg-red-500
+                           hover:bg-red-600 disabled:opacity-50 transition-colors${bouncingKey === `${ev.id}-rejected` ? ' animate-bounce-slight' : ''}`}
               >
                 ✕ Rejeitar
               </button>

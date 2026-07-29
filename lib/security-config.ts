@@ -133,6 +133,7 @@ export const inputValidation = {
     chatMessage: 1000,
     fileName: 255,
     fileSize: 10 * 1024 * 1024, // 10MB
+    date: 10, // YYYY-MM-DD
   },
   
   // Patterns de validação
