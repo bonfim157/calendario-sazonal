@@ -73,8 +73,8 @@ function sanitizeInput(value: any, type: keyof typeof inputValidation.maxLengths
 function createSanitizedSchema<T extends z.ZodTypeAny>(
   schema: T,
   fieldName: keyof typeof inputValidation.maxLengths
-): z.ZodEffects<T> {
-  return schema.transform((value, ctx) => {
+) {
+  return schema.transform((value: unknown, ctx: z.RefinementCtx) => {
     try {
       return sanitizeInput(value, fieldName)
     } catch (error) {
@@ -82,7 +82,7 @@ function createSanitizedSchema<T extends z.ZodTypeAny>(
         code: z.ZodIssueCode.custom,
         message: error instanceof Error ? error.message : 'Erro de sanitização',
       })
-      return z.NEVER
+      return undefined as never
     }
   })
 }
